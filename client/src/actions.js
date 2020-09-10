@@ -1,3 +1,3 @@
-// export const requestAccessToken = () => ({
-//     type: "REQUEST_ACCESS_TOKEN",
-//   });
+export const addCategory = () => ({
+  type: "ADD_CATEGORY",
+});

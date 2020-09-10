@@ -1,4 +1,9 @@
 const initialState = {
+  overview: {
+    "DAILY SKU": {},
+    "ALL PAGES": {},
+  },
+  categories: {},
   token: null,
   status: "idle",
 };
