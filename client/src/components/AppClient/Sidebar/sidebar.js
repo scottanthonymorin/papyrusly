@@ -4,13 +4,20 @@ import CategoryList from "./CategoryList";
 import styled from "styled-components";
 
 const Sidebar = () => {
+  const [selectedTab, SetSelectedTab] = React.useState("DAILY SKU");
   //Copy Section
   //Category component with subtitle and list of categories
   return (
     <>
       <Container>
-        <OverviewList />
-        <CategoryList />
+        <OverviewList
+          selectedTab={selectedTab}
+          SetSelectedTab={SetSelectedTab}
+        />
+        <CategoryList
+          selectedTab={selectedTab}
+          SetSelectedTab={SetSelectedTab}
+        />
       </Container>
     </>
   );
@@ -23,8 +30,8 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   height: 100vh;
-  width: 13vw;
+  width: 15vw;
   background: #16181e;
   padding: 5px;
-  position: relative;
+  position: fixed;
 `;

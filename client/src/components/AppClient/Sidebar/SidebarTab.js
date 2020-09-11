@@ -1,8 +1,23 @@
 import React from "react";
 import styled from "styled-components";
+// import { useDispatch } from "react-redux";
+// import { selectTab } from "../../../actions";
 
-const SidebarTab = ({ content }) => {
-  return <StyledButton>{content}</StyledButton>;
+const SidebarTab = ({ content, selectedTab, SetSelectedTab }) => {
+  // const dispatch = useDispatch();
+  const handleClick = (e) => {
+    SetSelectedTab(e.target.value);
+    // dispatch(selectTab());
+  };
+  return (
+    <StyledButton
+      onClick={handleClick}
+      value={content}
+      style={{ color: selectedTab === content ? "#9EA2A6" : "#4b545c" }}
+    >
+      {content}
+    </StyledButton>
+  );
 };
 
 export default SidebarTab;

@@ -4,31 +4,17 @@ const initialState = {
     "ALL PAGES": {},
   },
   categories: {},
-  token: null,
+  selectedTab: null,
   status: "idle",
 };
 
-export default function artistReducer(state = initialState, action) {
+export default function sidebarReducer(state = initialState, action) {
+  console.log(action.type);
   switch (action.type) {
-    case "REQUEST_ARTIST_INFO":
+    case "SELECT_CATEGORY":
       return {
         ...state,
-        status: "loading",
-      };
-    case "RECEIVE_ARTIST_INFO":
-      return {
-        ...state,
-        status: "idle",
-        currentArtist: {
-          profile: {
-            ...action.result,
-          },
-        },
-      };
-    case "ERROR_ARTIST_INFO":
-      return {
-        ...state,
-        status: "error",
+        selectedTab: true,
       };
     default: {
       return state;
@@ -36,15 +22,43 @@ export default function artistReducer(state = initialState, action) {
   }
 }
 
-export const requestArtistInfo = () => ({
-  type: "REQUEST_ARTIST_INFO",
-});
+// export default function artistReducer(state = initialState, action) {
+//   switch (action.type) {
+//     case "REQUEST_ARTIST_INFO":
+//       return {
+//         ...state,
+//         status: "loading",
+//       };
+//     case "RECEIVE_ARTIST_INFO":
+//       return {
+//         ...state,
+//         status: "idle",
+//         currentArtist: {
+//           profile: {
+//             ...action.result,
+//           },
+//         },
+//       };
+//     case "ERROR_ARTIST_INFO":
+//       return {
+//         ...state,
+//         status: "error",
+//       };
+//     default: {
+//       return state;
+//     }
+//   }
+// }
 
-export const receiveArtistInfo = (data) => ({
-  type: "RECEIVE_ARTIST_INFO",
-  ...data,
-});
+// export const requestArtistInfo = () => ({
+//   type: "REQUEST_ARTIST_INFO",
+// });
 
-export const receiveArtistInfoError = () => ({
-  type: "ERROR_ARTIST_INFO",
-});
+// export const receiveArtistInfo = (data) => ({
+//   type: "RECEIVE_ARTIST_INFO",
+//   ...data,
+// });
+
+// export const receiveArtistInfoError = () => ({
+//   type: "ERROR_ARTIST_INFO",
+// });
