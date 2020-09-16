@@ -27,15 +27,22 @@ const Journal = () => {
     if (startSearch === false) return;
     const populateCommonQueries = async () => {
       let query = textToQuery(content).replace(" ", "_");
-      console.log(query);
       if (query.length > 0) {
-        let response = await getFetch(
-          "https://jsonplaceholder.typicode.com/todos/1"
-        );
+        // let response = await getFetch(
+        //   "https://jsonplaceholder.typicode.com/todos/1"
+        // );
+
+        let response = await fetch(`/api/test/${query}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        let JSONdata = await response.json();
+        console.log(JSONdata);
         // let response = await getFetch(
         //   `https://www.google.com/complete/search?output=toolbar&q=${query}`
         // );
-        console.log(response);
       }
     };
     populateCommonQueries();

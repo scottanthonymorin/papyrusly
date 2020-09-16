@@ -4,8 +4,6 @@ export const getFetch = async (url) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      mode: "no-cors",
     },
   });
   return await response.json();

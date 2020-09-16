@@ -1,3 +1,3 @@
-import { handleTest } from "../handlers/handleTest";
+const handleTest = require("../handlers/handleTest");
 
-export default { handleTest };
+module.exports = handleTest;
