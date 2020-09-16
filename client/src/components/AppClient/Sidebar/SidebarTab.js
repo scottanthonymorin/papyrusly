@@ -6,6 +6,7 @@ import styled from "styled-components";
 const SidebarTab = ({ content, selectedTab, SetSelectedTab }) => {
   // const dispatch = useDispatch();
   const handleClick = (e) => {
+    console.log(e.target.value);
     SetSelectedTab(e.target.value);
     // dispatch(selectTab());
   };

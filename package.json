@@ -1,0 +1,13 @@
+{
+  "name": "semsai",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"yarn --cwd client start\" \"yarn --cwd server start\"",
+    "install": "yarn --cwd client install && yarn --cwd server install"
+  },
+  "devDependencies": {
+    "concurrently": "^5.1.0"
+  },
+  "dependencies": {}
+}
