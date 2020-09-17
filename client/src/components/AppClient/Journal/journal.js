@@ -7,7 +7,8 @@ import { textToQuery } from "../../../helpers/textToQuery";
 import { getFetch } from "../../../helpers/getFetch";
 
 const Journal = () => {
-  const [write, SetWrite] = React.useState(false);
+  const [fetchQuestions, SetFetchQuestions] = React.useState([]);
+  const [fetchStatus, SetFetchStatus] = React.useState("idle");
   const [startSearch, SetStartSearch] = React.useState(false);
   const [content, SetContent] = React.useState("");
   const [placeholder, SetPlaceholder] = React.useState(
@@ -26,12 +27,9 @@ const Journal = () => {
   React.useEffect(() => {
     if (startSearch === false) return;
     const populateCommonQueries = async () => {
+      SetFetchStatus("fetching");
       let query = textToQuery(content).replace(" ", "_");
       if (query.length > 0) {
-        // let response = await getFetch(
-        //   "https://jsonplaceholder.typicode.com/todos/1"
-        // );
-
         let response = await fetch(`/api/test/${query}`, {
           method: "GET",
           headers: {
@@ -39,10 +37,9 @@ const Journal = () => {
           },
         });
         let JSONdata = await response.json();
-        console.log(JSONdata);
-        // let response = await getFetch(
-        //   `https://www.google.com/complete/search?output=toolbar&q=${query}`
-        // );
+        console.log(JSONdata)
+        SetFetchQuestions(JSONdata);
+        // SetFetchStatus("fetching")
       }
     };
     populateCommonQueries();

@@ -10,7 +10,7 @@ const AppClient = () => {
       <AppContainer>
         <Sidebar />
         <Journal />
-        {/* <InfoBar /> */}
+        <InfoBar />
       </AppContainer>
     </>
   );

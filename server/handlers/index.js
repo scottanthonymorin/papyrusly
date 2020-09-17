@@ -1,3 +1,3 @@
-const handleTest = require("../handlers/handleTest");
+const handleQuery = require("./handleQuery");
 
-module.exports = handleTest;
+module.exports = handleQuery;
