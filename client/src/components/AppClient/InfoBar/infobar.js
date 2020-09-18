@@ -3,10 +3,12 @@ import Accordian from "../Accordion/Accordion";
 
 import styled from "styled-components";
 
-const Infobar = ({ objectOfQuestions }) => {
+const Infobar = () => {
   return (
     <>
-      <Accordian />
+      <Container>
+        <Accordian />
+      </Container>
     </>
   );
 };
@@ -16,10 +18,9 @@ export default Infobar;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  height: 100vh;
-  width: 15vw;
-  background: #16181e;
-  padding: 5px;
-  position: fixed;
+  position: relative;
+  height: 100%;
+  position: relative;
+  z-index: 0;
+  transition: opacity 0.2s;
 `;

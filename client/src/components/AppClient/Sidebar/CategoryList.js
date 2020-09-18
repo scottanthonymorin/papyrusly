@@ -6,9 +6,13 @@ const CategoryList = ({ selectedTab, SetSelectedTab }) => {
   //Copy Section
   //Category component with subtitle and list of categories
   const categoryTabs = useSelector((state) => Object.keys(state.categories));
-  return categoryTabs.map((tab) => {
+  return categoryTabs.map((tab, index) => {
     return (
-      <SidebarTab selectedTab={selectedTab} SetSelectedTab={SetSelectedTab}>
+      <SidebarTab
+        selectedTab={selectedTab}
+        SetSelectedTab={SetSelectedTab}
+        key={index}
+      >
         {tab}
       </SidebarTab>
     );

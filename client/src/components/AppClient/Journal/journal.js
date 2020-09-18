@@ -5,6 +5,8 @@ import { getDate } from "../../../helpers/date";
 import { shouldISearch } from "../../../helpers/shouldISearch";
 import { textToQuery } from "../../../helpers/textToQuery";
 import { getFetch } from "../../../helpers/getFetch";
+import { addQuestionQueries } from "../../../actions";
+import { useDispatch } from "react-redux";
 
 const Journal = () => {
   const [fetchQuestions, SetFetchQuestions] = React.useState([]);
@@ -14,6 +16,8 @@ const Journal = () => {
   const [placeholder, SetPlaceholder] = React.useState(
     "Type your text in here"
   );
+
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     if (content.length > 0) {
@@ -37,8 +41,8 @@ const Journal = () => {
           },
         });
         let JSONdata = await response.json();
-        console.log(JSONdata)
-        SetFetchQuestions(JSONdata);
+        dispatch(addQuestionQueries(JSONdata));
+        // SetFetchQuestions(JSONdata);
         // SetFetchStatus("fetching")
       }
     };
@@ -98,9 +102,10 @@ const ScrollContainer = styled.div`
   flex-direction: column;
 
   &::after {
+    /* will have to adjust width for responsiveness */
     content: "";
     background: linear-gradient(-180deg, #fff 78%, hsla(0, 0%, 100%, 0));
-    width: 100%;
+    width: 60%;
     height: 10%;
     position: fixed;
     top: 0%;

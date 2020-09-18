@@ -30,7 +30,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   height: 100vh;
-  width: 15vw;
+  width: 12vw;
   background: #16181e;
   padding: 5px;
   position: fixed;

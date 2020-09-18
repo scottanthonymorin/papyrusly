@@ -4,9 +4,10 @@ import { useSelector } from "react-redux";
 
 const OverviewList = ({ selectedTab, SetSelectedTab }) => {
   const overviewTabs = useSelector((state) => Object.keys(state.overview));
-  return overviewTabs.map((tab) => {
+  return overviewTabs.map((tab, index) => {
     return (
       <SidebarTab
+        key={index}
         content={tab}
         selectedTab={selectedTab}
         SetSelectedTab={SetSelectedTab}

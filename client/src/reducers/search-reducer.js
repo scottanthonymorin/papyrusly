@@ -1,23 +1,34 @@
+import produce from "immer";
+
 const initialState = {
   overview: {
     "DAILY SKU": {},
     "ALL PAGES": {},
   },
   categories: {},
+  questions: {},
   selectedTab: null,
   status: "idle",
 };
 
 export default function sidebarReducer(state = initialState, action) {
   console.log(action.type);
+  console.log(action);
   switch (action.type) {
     case "SELECT_CATEGORY":
       return {
         ...state,
         selectedTab: true,
       };
+    case "ADD_QUESTIONS": {
+      return produce(state, (draftState) => {
+        draftState.questions = action.questions;
+      });
+    }
     default: {
-      return state;
+      return {
+        ...state,
+      };
     }
   }
 }
