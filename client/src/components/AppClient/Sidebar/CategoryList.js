@@ -1,20 +1,17 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import SidebarTab from "./SidebarTab";
+import CategoryTab from "./CategoryTab";
 
 const CategoryList = ({ selectedTab, SetSelectedTab }) => {
-  //Copy Section
-  //Category component with subtitle and list of categories
   const categoryTabs = useSelector((state) => Object.keys(state.categories));
-  return categoryTabs.map((tab, index) => {
+  return categoryTabs.map((title, index) => {
     return (
-      <SidebarTab
+      <CategoryTab
         selectedTab={selectedTab}
         SetSelectedTab={SetSelectedTab}
         key={index}
-      >
-        {tab}
-      </SidebarTab>
+        content={title}
+      />
     );
   });
 };

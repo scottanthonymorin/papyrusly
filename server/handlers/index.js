@@ -1,3 +1,3 @@
-const handleQuery = require("./handleQuery");
+const scrapeData = require("./scrapeData");
 
-module.exports = handleQuery;
+module.exports = scrapeData;

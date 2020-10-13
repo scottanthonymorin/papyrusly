@@ -1,23 +1,20 @@
 import React from "react";
-import OverviewList from "./OverviewList";
 import CategoryList from "./CategoryList";
 import styled from "styled-components";
 
 const Sidebar = () => {
-  const [selectedTab, SetSelectedTab] = React.useState("DAILY SKU");
+  const [selectedTab, SetSelectedTab] = React.useState("soccer");
   //Copy Section
   //Category component with subtitle and list of categories
   return (
     <>
       <Container>
-        <OverviewList
-          selectedTab={selectedTab}
-          SetSelectedTab={SetSelectedTab}
-        />
-        <CategoryList
-          selectedTab={selectedTab}
-          SetSelectedTab={SetSelectedTab}
-        />
+        <ContentContainer>
+          <CategoryList
+            selectedTab={selectedTab}
+            SetSelectedTab={SetSelectedTab}
+          />
+        </ContentContainer>
       </Container>
     </>
   );
@@ -26,12 +23,19 @@ const Sidebar = () => {
 export default Sidebar;
 
 const Container = styled.div`
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  top: 0px;
+  z-index: 100;
+  background: rgb(5, 21, 47);
+  width: 232px;
+`;
+
+const ContentContainer = styled.div`
+  flex: 1 1 0px;
+  height: 100%;
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  height: 100vh;
-  width: 12vw;
-  background: #16181e;
-  padding: 5px;
-  position: fixed;
 `;

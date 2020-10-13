@@ -4,7 +4,7 @@ const app = express();
 const router = express.Router();
 const PORT = 4000;
 const fetch = require("isomorphic-fetch");
-const handleQuery = require("../server/handlers/index");
+const handleScrapeData = require("../server/handlers/index");
 
 app.use(express.json());
 app.use(function (req, res, next) {
@@ -21,7 +21,7 @@ app.use(function (req, res, next) {
 app.use("/api", router);
 app.use(cors());
 
-router.get("/test/:query", handleQuery);
+router.get("/getOddsData/:selectedCategory", handleScrapeData);
 
 console.log("server running");
 const server = app.listen(PORT, function () {

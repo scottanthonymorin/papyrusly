@@ -86,6 +86,8 @@ h4 {font-size: 1.44em;}
 h5 {font-size: 1.2em;}
 
 small, .text_small {font-size: 0.833em;}
+
+
 `;
 
 export default GlobalStyles;

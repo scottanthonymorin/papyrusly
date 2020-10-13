@@ -1,24 +1,29 @@
 import produce from "immer";
 
 const initialState = {
-  overview: {
-    "DAILY SKU": {},
-    "ALL PAGES": {},
+  categories: {
+    soccer: "soccer",
+    tennis: "tennis",
+    hockey: "hockey",
+    baseball: "baseball",
+    basketball: "basketball",
+    football: "football",
+    tennis: "tennis",
   },
-  categories: {},
-  questions: {},
-  selectedTab: null,
+  selectedCategory: "soccer",
   status: "idle",
 };
 
 export default function sidebarReducer(state = initialState, action) {
   console.log(action.type);
+
   console.log(action);
+  console.log(action.sport);
   switch (action.type) {
     case "SELECT_CATEGORY":
       return {
         ...state,
-        selectedTab: true,
+        selectedCategory: action.sport,
       };
     case "ADD_QUESTIONS": {
       return produce(state, (draftState) => {

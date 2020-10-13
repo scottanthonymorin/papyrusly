@@ -1,5 +1,6 @@
-export const selectTab = () => ({
+export const selectCategory = (data) => ({
   type: "SELECT_CATEGORY",
+  sport: data,
 });
 
 export const addCategory = () => ({
