@@ -3,7 +3,7 @@ import CategoryList from "./CategoryList";
 import styled from "styled-components";
 
 const Sidebar = () => {
-  const [selectedTab, SetSelectedTab] = React.useState("soccer");
+  const [selectedTab, SetSelectedTab] = React.useState("football");
   //Copy Section
   //Category component with subtitle and list of categories
   return (

@@ -4,7 +4,8 @@ const app = express();
 const router = express.Router();
 const PORT = 4000;
 const fetch = require("isomorphic-fetch");
-const handleScrapeData = require("../server/handlers/index");
+const process = require("process");
+const { handleScrapeData } = require("../server/handlers/index");
 
 app.use(express.json());
 app.use(function (req, res, next) {
@@ -27,3 +28,5 @@ console.log("server running");
 const server = app.listen(PORT, function () {
   console.info("🌍 Listening on port " + server.address().port);
 });
+
+process.on("warning", (e) => console.warn(e.stack));

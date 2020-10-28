@@ -2,32 +2,30 @@ import produce from "immer";
 
 const initialState = {
   categories: {
+    football: "football",
     soccer: "soccer",
     tennis: "tennis",
     hockey: "hockey",
     baseball: "baseball",
     basketball: "basketball",
-    football: "football",
-    tennis: "tennis",
   },
-  selectedCategory: "soccer",
+  selectedCategory: "football",
+  currentOdds: {},
   status: "idle",
 };
 
 export default function sidebarReducer(state = initialState, action) {
   console.log(action.type);
-
   console.log(action);
-  console.log(action.sport);
   switch (action.type) {
     case "SELECT_CATEGORY":
       return {
         ...state,
         selectedCategory: action.sport,
       };
-    case "ADD_QUESTIONS": {
+    case "UPLOAD_DATA": {
       return produce(state, (draftState) => {
-        draftState.questions = action.questions;
+        draftState.currentOdds = action.currentOdds;
       });
     }
     default: {

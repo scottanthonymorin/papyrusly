@@ -7,7 +7,7 @@ export const addCategory = () => ({
   type: "ADD_CATEGORY",
 });
 
-export const addQuestionQueries = (data) => ({
-  type: "ADD_QUESTIONS",
-  questions: data,
+export const uploadTeamData = (data) => ({
+  type: "UPLOAD_DATA",
+  currentOdds: data,
 });

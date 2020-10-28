@@ -1,3 +1,3 @@
-const scrapeData = require("./scrapeData");
+const { handleScrapeData } = require("./scrapeData");
 
-module.exports = scrapeData;
+module.exports = { handleScrapeData };

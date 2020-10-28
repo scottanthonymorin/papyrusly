@@ -16,7 +16,6 @@ const AppClient = () => {
 
 const AppContainer = styled.div`
   display: flex;
-  background: ${(props) => props.theme.colors.lightBlue};
 `;
 
 export default AppClient;
