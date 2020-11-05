@@ -2,13 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import Data from "./Data/Data";
 import TwitterFeed from "./TwitterFeed/TwitterFeed";
-import SearchBar from "./SearchBar/SearchBar";
 
 const DashBoard = () => {
   return (
     <>
       <Container>
-        <SearchBar />
+        <DashBoardHeader>Dashboard</DashBoardHeader>
         <TwitterFeed />
         <Data />
       </Container>
@@ -19,11 +18,17 @@ const DashBoard = () => {
 export default DashBoard;
 
 const Container = styled.div`
-  margin-left: 252px;
-  height: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+  height: 100vh;
+  width: 100vw;
   position: relative;
   display: flex;
   flex-direction: column;
-  background: red;
   flex: 1;
+  background-color: ${(props) => props.theme.colors.blueAccent};
 `;
+
+const DashBoardHeader = styled.h1``;

@@ -32,20 +32,23 @@ const StyledButton = styled.button`
   align-items: center;
   padding: 15px 20px;
   display: flex;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
+  width: 100%;
   background-color: ${(props) =>
     props.value === props.selectedTab
-      ? props.theme.colors.lightBlue
+      ? props.theme.colors.white
       : "transparent"};
-  color: ${(props) => props.theme.colors.white};
+  color: ${(props) => props.theme.colors.black};
   border: none;
   font-size: 14px;
   line-height: 21px;
   font-weight: 800;
+  border-radius: 5px;
 
   &:hover {
     cursor: pointer;
     background: ${(props) => props.theme.colors.lightBlue};
+    color: ${(props) => props.theme.colors.white};
   }
 
   &:focus {
@@ -54,7 +57,7 @@ const StyledButton = styled.button`
 `;
 
 const SpanIcon = styled.span`
-  padding-right: 8px;
-  display: inline-block;
+  padding-right: 16px;
+  display: flex;
   flex: 0 0 auto;
 `;

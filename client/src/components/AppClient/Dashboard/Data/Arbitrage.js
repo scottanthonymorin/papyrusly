@@ -6,7 +6,7 @@ const Arbitrage = ({ oddsArray, toggleFetched }) => {
     let openGames = oddsArray.filter((game) => Object.keys(game).length > 4);
     let arbArray = openGames.map((game) => calculateArbitrage(game));
     console.log(arbArray);
-  }, [toggleFetched]);
+  }, [toggleFetched, oddsArray]);
 
   return <h1>hello</h1>;
 };

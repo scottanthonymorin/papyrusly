@@ -54,7 +54,8 @@ const calculateArbitrage = (matchup) => {
     });
   });
 
-  let resultArray = pushArray.filter((permutation) => permutation.total < 100);
+  // let resultArray = pushArray.filter((permutation) => permutation.total < 100);
+  let resultArray = pushArray;
   return resultArray;
   // euPrice = (positive us price/100) +1
   // or 1/[(-200/100) *-1] +1

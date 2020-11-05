@@ -8,35 +8,62 @@ import { uploadTeamData } from "../../../../actions";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Arbitrage from "./Arbitrage";
-
+import Table from "./Table";
 const Data = () => {
   const [oddsArray, SetOddsArray] = React.useState([]);
   const [toggleFetched, SetToggleFetched] = React.useState(false);
+  const [headings, SetHeadings] = React.useState([
+    "Matchup",
+    "Pinnacle",
+    "BetWay",
+  ]);
+  const [rows, SetRows] = React.useState([]);
   const selectedCategory = useSelector((state) => state.selectedCategory);
   const dispatch = useDispatch();
-  const DELAY = 20000;
+  const DELAY = 60000;
 
   React.useEffect(() => {
-    (async function scrape() {
-      console.log("scraping again");
-      const response = await fetch(`/api/getOddsData/${selectedCategory}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      if (data.status === 200) {
-        SetOddsArray([...data.result]);
-        SetToggleFetched(!toggleFetched);
-        dispatch(uploadTeamData(data.result));
-      } else {
+    async function scrape() {
+      try {
+        const response = await fetch(`/api/getOddsData/${selectedCategory}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        if (data.status === 200) {
+          SetOddsArray([...data.result]);
+          dispatch(uploadTeamData(data.result));
+        }
+      } catch (err) {
         console.log("fetching data error");
       }
+      window.scrapeID = setTimeout(scrape, DELAY);
+    }
 
-      setTimeout(scrape, DELAY);
-    })();
+    if (!window.scrapeID) {
+      scrape();
+    }
   }, [dispatch, selectedCategory]);
+
+  React.useEffect(() => {
+    const _rows = [];
+    oddsArray.forEach((match) => {
+      let teamOnePinnacle = match.teamOnePinnacle ?? "-";
+      let teamTwoPinnacle = match.teamTwoPinnacle ?? "-";
+      let teamOneBetway = match.teamOneBetway ?? "-";
+      let teamTwoBetway = match.teamTwoBetway ?? "-";
+
+      _rows.push([
+        `${match?.teamOne} | ${match?.teamTwo}`,
+        `${teamOnePinnacle} | ${teamTwoPinnacle}`,
+        `${teamOneBetway} | ${teamTwoBetway}`,
+      ]);
+    });
+
+    SetRows(_rows);
+  }, [oddsArray]);
 
   return (
     <>
@@ -44,9 +71,7 @@ const Data = () => {
         {!!oddsArray.length ? (
           <>
             <Container>
-              {oddsArray.map((game, index) => {
-                return <OddsTab key={index} game={game}></OddsTab>;
-              })}
+              <Table headings={headings} rows={rows} />
               <Arbitrage toggleFetched={toggleFetched} oddsArray={oddsArray}>
                 Another Node
               </Arbitrage>
@@ -64,7 +89,6 @@ export default Data;
 
 const GameDisplay = styled.div`
   display: flex;
-  background: #fbfbfb;
 `;
 
 const Container = styled.div`

@@ -10,6 +10,7 @@ const Sidebar = () => {
     <>
       <Container>
         <ContentContainer>
+          <BigLogo />
           <CategoryList
             selectedTab={selectedTab}
             SetSelectedTab={SetSelectedTab}
@@ -23,19 +24,19 @@ const Sidebar = () => {
 export default Sidebar;
 
 const Container = styled.div`
-  position: absolute;
-  left: 0px;
-  bottom: 0px;
-  top: 0px;
-  z-index: 100;
-  background: rgb(5, 21, 47);
-  width: 232px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1;
 `;
 
 const ContentContainer = styled.div`
-  flex: 1 1 0px;
-  height: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  padding: 16px 12px;
+  display: block;
+  width: 232px;
+`;
+
+const BigLogo = styled.div`
+  background: red;
+  display: block;
+  height: 30px;
 `;

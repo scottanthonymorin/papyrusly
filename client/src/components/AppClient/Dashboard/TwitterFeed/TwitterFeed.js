@@ -12,6 +12,5 @@ export default TwitterFeed;
 
 const Container = styled.div`
   display: flex;
-  background: white;
   color: black;
 `;

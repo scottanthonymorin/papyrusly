@@ -50,14 +50,14 @@ table {
 *:after {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
 }
 
 html {font-size: 100%;} /*16px*/
 
 body {
   background-color: white;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-weight: 400;
   line-height: 1.65;
   color: #333;
@@ -67,7 +67,7 @@ p {margin-bottom: 1.15rem;}
 
 h1, h2, h3, h4, h5 {
   margin: 2.75rem 0 1.05rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-weight: 400;
   line-height: 1.15;
 }
