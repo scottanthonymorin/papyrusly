@@ -13,9 +13,19 @@ const Table = ({ headings, rows }) => {
     );
   };
 
+  console.log("rows", rows);
+
   const Row = (_row, rowIndex) => {
     return (
-      <tr key={`row-${rowIndex}`}>
+      <StyledTR
+        key={`row-${rowIndex}`}
+        onClick={() => {
+          window.open(
+            "https://sports.betway.com/en/sports/cat/american-football"
+          );
+          window.open("https://www.pinnacle.com/en/football/matchups");
+        }}
+      >
         {rows[rowIndex].map((_cell, cellIndex) => {
           return (
             <Cell
@@ -24,22 +34,48 @@ const Table = ({ headings, rows }) => {
             />
           );
         })}
-      </tr>
+      </StyledTR>
     );
   };
 
-  const theadMarkup = <tr key="heading">{headings.map(HeadingRow)}</tr>;
+  const theadMarkup = (
+    <StyledTR key="heading">{headings.map(HeadingRow)}</StyledTR>
+  );
 
   const tbodyMarkup = rows.map(Row);
 
   return (
     <TableContainer>
-      <thead>{theadMarkup}</thead>
-      <tbody>{tbodyMarkup}</tbody>
+      <StyledThead>{theadMarkup}</StyledThead>
+      <StyledTBody>{tbodyMarkup}</StyledTBody>
     </TableContainer>
   );
 };
 
 export default Table;
 
-const TableContainer = styled.table``;
+const TableContainer = styled.table`
+  background-color: ${(props) => props.theme.colors.white};
+  border-radius: 5px;
+`;
+
+const StyledThead = styled.thead`
+  background-color: ${(props) => props.theme.colors.lightGrey};
+  border: 1px solid ${(props) => props.theme.colors.grey};
+  border-radius: 5px 5px 0px 0px;
+`;
+
+const StyledTBody = styled.tbody`
+  background-color: ${(props) => props.theme.colors.white};
+  border: 1px solid ${(props) => props.theme.colors.grey};
+  border-radius: 5px 5px 0px 0px;
+`;
+
+const StyledTR = styled.tr`
+  width: 100%;
+  border: 1px solid ${(props) => props.theme.colors.grey};
+
+  &:hover {
+    background: ${(props) => props.theme.colors.lightGrey};
+  }
+`;

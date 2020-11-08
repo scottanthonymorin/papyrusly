@@ -24,7 +24,11 @@ const handleScrapeData = async (req, res) => {
     }, []);
 
     result = result.filter(
-      (game) => !!game.teamOne.length || !!game.teamTwo.length
+      (game) =>
+        !!game.teamOnePinnacle?.length &&
+        !!game.teamTwoPinnacle?.length &&
+        !!game.teamOneBetway?.length &&
+        !!game.teamTwoBetway?.length
     );
 
     res.send({ status: 200, result });

@@ -9,7 +9,7 @@ const AppClient = () => {
     <>
       <AppContainer>
         <Sidebar />
-        <div>
+        <div style={{ width: "100%" }}>
           <SearchBar />
           <Dashboard />
         </div>

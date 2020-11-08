@@ -7,8 +7,9 @@ import { useDispatch } from "react-redux";
 import { uploadTeamData } from "../../../../actions";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import Arbitrage from "./Arbitrage";
 import Table from "./Table";
+import calculateArbitrage from "../../../../helpers/calculateArbitrage";
+
 const Data = () => {
   const [oddsArray, SetOddsArray] = React.useState([]);
   const [toggleFetched, SetToggleFetched] = React.useState(false);
@@ -16,6 +17,7 @@ const Data = () => {
     "Matchup",
     "Pinnacle",
     "BetWay",
+    "Arbitrage",
   ]);
   const [rows, SetRows] = React.useState([]);
   const selectedCategory = useSelector((state) => state.selectedCategory);
@@ -48,17 +50,30 @@ const Data = () => {
   }, [dispatch, selectedCategory]);
 
   React.useEffect(() => {
+    let openGames = oddsArray.filter((game) => Object.keys(game).length > 4);
+
+    let arbArray = [];
+
+    openGames.forEach((game) => {
+      let min = calculateArbitrage(game);
+      arbArray.push(min);
+    });
+    console.log(arbArray);
+
     const _rows = [];
-    oddsArray.forEach((match) => {
+    oddsArray.forEach((match, index) => {
       let teamOnePinnacle = match.teamOnePinnacle ?? "-";
       let teamTwoPinnacle = match.teamTwoPinnacle ?? "-";
       let teamOneBetway = match.teamOneBetway ?? "-";
       let teamTwoBetway = match.teamTwoBetway ?? "-";
 
+      //calculate max_arb
+
       _rows.push([
         `${match?.teamOne} | ${match?.teamTwo}`,
         `${teamOnePinnacle} | ${teamTwoPinnacle}`,
         `${teamOneBetway} | ${teamTwoBetway}`,
+        (100 - arbArray[index].total).toFixed(2) + "%",
       ]);
     });
 
@@ -72,9 +87,6 @@ const Data = () => {
           <>
             <Container>
               <Table headings={headings} rows={rows} />
-              <Arbitrage toggleFetched={toggleFetched} oddsArray={oddsArray}>
-                Another Node
-              </Arbitrage>
             </Container>
           </>
         ) : (

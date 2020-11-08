@@ -1,6 +1,7 @@
 const calculateArbitrage = (matchup) => {
   //check if american odds or decimal odds
 
+  console.log("calc arb running once");
   function EUConverter(number) {
     let _EUodd = number < 0 ? 1 / [(number / 100) * -1] + 1 : number / 100 + 1;
     return _EUodd;
@@ -54,9 +55,18 @@ const calculateArbitrage = (matchup) => {
     });
   });
 
+  let minArb = pushArray[0];
+
+  pushArray.forEach((game) => {
+    if (game.total < minArb.total) {
+      minArb = game;
+    }
+  });
+  console.log(minArb);
+
   // let resultArray = pushArray.filter((permutation) => permutation.total < 100);
-  let resultArray = pushArray;
-  return resultArray;
+  // let resultArray = pushArray;
+  return minArb;
   // euPrice = (positive us price/100) +1
   // or 1/[(-200/100) *-1] +1
 

@@ -8,7 +8,7 @@ const Arbitrage = ({ oddsArray, toggleFetched }) => {
     console.log(arbArray);
   }, [toggleFetched, oddsArray]);
 
-  return <h1>hello</h1>;
+  return <h1></h1>;
 };
 
 export default Arbitrage;

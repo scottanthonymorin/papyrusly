@@ -4,6 +4,12 @@ export default {
     lightBlue: `#4981FF`,
     blueAccent: `#F4F5F9`,
     black: "#202224",
+    lightGrey: "#F9F9FB",
+    grey: "#EAEAEA",
+    green: "#45D68D",
+    lightGreen: "#D8F7E8",
+    red: "#FD9475",
+    lightRed: "#FDDCD0",
   },
 };
 
