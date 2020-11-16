@@ -36,9 +36,10 @@ const StyledButton = styled.button`
   width: 100%;
   background-color: ${(props) =>
     props.value === props.selectedTab
-      ? props.theme.colors.white
+      ? props.theme.colors.lightBlue
       : "transparent"};
-  color: ${(props) => props.theme.colors.black};
+  color: ${(props) =>
+    props.value === props.selectedTab ? props.theme.colors.white : "black"};
   border: none;
   font-size: 14px;
   line-height: 21px;

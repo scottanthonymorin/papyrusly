@@ -12,7 +12,6 @@ import calculateArbitrage from "../../../../helpers/calculateArbitrage";
 
 const Data = () => {
   const [oddsArray, SetOddsArray] = React.useState([]);
-  const [toggleFetched, SetToggleFetched] = React.useState(false);
   const [headings, SetHeadings] = React.useState([
     "Matchup",
     "Pinnacle",
@@ -20,14 +19,15 @@ const Data = () => {
     "Arbitrage",
   ]);
   const [rows, SetRows] = React.useState([]);
+  const [stakes, SetStakes] = React.useState([]);
   const selectedCategory = useSelector((state) => state.selectedCategory);
   const dispatch = useDispatch();
-  const DELAY = 60000;
+  const DELAY = 30000;
 
   React.useEffect(() => {
     async function scrape() {
       try {
-        const response = await fetch(`/api/getOddsData/${selectedCategory}`, {
+        const response = await fetch(`/getOddsData/${selectedCategory}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -35,8 +35,33 @@ const Data = () => {
         });
         const data = await response.json();
         if (data.status === 200) {
-          SetOddsArray([...data.result]);
-          dispatch(uploadTeamData(data.result));
+          let resultData = [...data.result];
+          let processedData = resultData.map((game) => {
+            let arbData = calculateArbitrage(game);
+            return {
+              ...arbData,
+              ...game,
+            };
+          });
+          processedData.sort((a, b) => {
+            if (isNaN(a.total)) {
+              return 1 - isNaN(b);
+            } else if (a?.total > b?.total) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
+          SetStakes(
+            processedData.map((game) => ({
+              stakeOne: game.stakeOne,
+              stakeTwo: game.stakeTwo,
+              teamOne: game.teamOne,
+              teamTwo: game.teamTwo,
+            }))
+          );
+          SetOddsArray(processedData);
+          dispatch(uploadTeamData(processedData));
         }
       } catch (err) {
         console.log("fetching data error");
@@ -50,16 +75,6 @@ const Data = () => {
   }, [dispatch, selectedCategory]);
 
   React.useEffect(() => {
-    let openGames = oddsArray.filter((game) => Object.keys(game).length > 4);
-
-    let arbArray = [];
-
-    openGames.forEach((game) => {
-      let min = calculateArbitrage(game);
-      arbArray.push(min);
-    });
-    console.log(arbArray);
-
     const _rows = [];
     oddsArray.forEach((match, index) => {
       let teamOnePinnacle = match.teamOnePinnacle ?? "-";
@@ -67,18 +82,18 @@ const Data = () => {
       let teamOneBetway = match.teamOneBetway ?? "-";
       let teamTwoBetway = match.teamTwoBetway ?? "-";
 
-      //calculate max_arb
-
       _rows.push([
         `${match?.teamOne} | ${match?.teamTwo}`,
         `${teamOnePinnacle} | ${teamTwoPinnacle}`,
         `${teamOneBetway} | ${teamTwoBetway}`,
-        (100 - arbArray[index].total).toFixed(2) + "%",
+        (100 - match.total).toFixed(2) + "%",
       ]);
     });
-
     SetRows(_rows);
   }, [oddsArray]);
+
+  ///pass stakes into table component so we when we click the game, it will have
+  //an accordian effect and will reveal stakes and linkes for the sites
 
   return (
     <>
@@ -86,11 +101,13 @@ const Data = () => {
         {!!oddsArray.length ? (
           <>
             <Container>
-              <Table headings={headings} rows={rows} />
+              <Table headings={headings} rows={rows} stakes={stakes} />
             </Container>
           </>
         ) : (
-          <Loader type="Bars" color="#00BFFF" height={100} width={100} />
+          <LoaderContainer>
+            <Loader type="Bars" color="#00BFFF" height={100} width={100} />
+          </LoaderContainer>
         )}
       </GameDisplay>
     </>
@@ -101,10 +118,22 @@ export default Data;
 
 const GameDisplay = styled.div`
   display: flex;
+  height: 100%;
 `;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 80%;
+  width: 100%;
+  overflow-y: scroll;
+`;
+
+const LoaderContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 `;

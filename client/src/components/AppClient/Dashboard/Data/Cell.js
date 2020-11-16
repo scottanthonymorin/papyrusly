@@ -3,11 +3,12 @@ import styled from "styled-components";
 
 export default function Cell({ content, header }) {
   let polarity = "neutral";
-  if (content.split("").includes("%")) {
-    polarity = "positive";
-    if (content.split("").includes("-")) {
-      console.log("contains negative");
-      polarity = "negative";
+  if (content) {
+    if (content.split("").includes("%")) {
+      polarity = "positive";
+      if (content.split("").includes("-")) {
+        polarity = "negative";
+      }
     }
   }
 
@@ -41,13 +42,13 @@ export default function Cell({ content, header }) {
   return cellMarkup;
 }
 
-const StyledHeaderCell = styled.th`
-  padding: 6px 20px;
+const StyledHeaderCell = styled.div`
+  padding: 6px 17px;
   font-weight: bold;
   text-align: left;
 `;
 
-const StyledCell = styled.th`
+const StyledCell = styled.div`
   padding: 20px 20px;
   text-align: left;
 `;

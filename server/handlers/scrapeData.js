@@ -11,9 +11,10 @@ const handleScrapeData = async (req, res) => {
       betWayScrape(selectedCategory),
     ]);
 
+    //do something to check for undefined for iterables
     let totalArray = [...pinnacle, ...betway]; ///spread into array for all sites you scrape from
 
-    let result = totalArray.reduce((array, game) => {
+    let result = (totalArray ?? []).reduce((array, game) => {
       const found = array.find((obj) => game.teamOne === obj.teamOne);
       if (!found) {
         array.push(game);
@@ -23,13 +24,13 @@ const handleScrapeData = async (req, res) => {
       return array;
     }, []);
 
-    result = result.filter(
-      (game) =>
-        !!game.teamOnePinnacle?.length &&
-        !!game.teamTwoPinnacle?.length &&
-        !!game.teamOneBetway?.length &&
-        !!game.teamTwoBetway?.length
-    );
+    // result = result.filter(
+    //   (game) =>
+    //     !!game.teamOnePinnacle?.length &&
+    //     !!game.teamTwoPinnacle?.length &&
+    //     !!game.teamOneBetway?.length &&
+    //     !!game.teamTwoBetway?.length
+    // );
 
     res.send({ status: 200, result });
   } catch (error) {

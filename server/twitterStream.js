@@ -1,15 +1,14 @@
 require("dotenv").config();
-const allAccounts = require("./accounts");
-const filterData = require("./filterData");
+const filterData = require("./twitter/filterData");
 const RANK = 2;
-const searchQueries = require("./queries"); //
-const keywordArray = require("./keywordArray");
-const negativeTerms = require("./negativeTerms");
-
-const { statuses } = require("./statusCodes");
-
+const searchQueries = require("./twitter/queries"); //
+const keywordArray = require("./twitter/keywordArray");
+const negativeTerms = require("./twitter/negativeTerms");
+const { statuses } = require("./twitter/statusCodes");
 const needle = require("needle");
 //
+const Sentiment = require("sentiment");
+const sentiment = new Sentiment();
 
 // const consumer_key = process.env.TWITTER_CONSUMER_KEY;
 // const consumer_secret = process.env.TWITTER_CONSUMER_SECRET;
@@ -42,6 +41,9 @@ async function getAllRules() {
     throw new Error(response.body);
     return null;
   }
+  if (response.statusCode === 200) {
+    console.log("getAllRules complete.");
+  }
 
   return response.body;
 }
@@ -65,6 +67,10 @@ async function deleteAllRules(rules) {
       authorization: `Bearer ${token}`,
     },
   });
+
+  if (response.statusCode === 200) {
+    console.log("deleteAllRules complete.");
+  }
 
   if (response.statusCode !== 200) {
     throw new Error(response.body);
@@ -99,6 +105,10 @@ async function setRules() {
     return null;
   }
 
+  if (response.statusCode === 200) {
+    console.log("setRules complete.");
+  }
+
   response.on("done", function (error) {
     if (error) {
       console.log("setRules error", error.message);
@@ -110,18 +120,8 @@ async function setRules() {
   return response.body;
 }
 
-function getKeyByValue(object, value) {
-  let x = null;
-  for (let prop in object) {
-    if (object[prop] == value) {
-      x = prop;
-    }
-  }
-  return x;
-}
-
 const AWS = require("aws-sdk");
-AWS.config.loadFromPath("./config.json");
+AWS.config.loadFromPath("./twitter/config.json");
 
 const sendEmail = async (id, text) => {
   const SNS = new AWS.SNS({ apiVersion: "2010-03-31" });
@@ -153,7 +153,7 @@ function streamConnect() {
 
   // const stream = needle.get(streamURL, options);
   const stream = needle.get(
-    "https://api.twitter.com/2/tweets/search/stream?tweet.fields=created_at&expansions=author_id&user.fields=created_at",
+    "https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics&expansions=author_id&user.fields=created_at",
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -169,12 +169,28 @@ function streamConnect() {
   stream
     .on("data", (data) => {
       try {
-        const json = JSON.parse(data);
+        const rawTweetData = JSON.parse(data);
         let isHit = filterMatch(json.data.text, filterData, RANK, keywordArray);
         let username = json.includes.users[0].username;
+        // let tweet = `[${username}]:${json.data.text}`;
+        let tweetSentiment = sentiment.analyze(json.data.text);
+        let options = {
+          accept: "application/json",
+          content_type: "application/json",
+        };
+
+        let tweetData = { rawTweetData, tweetSentiment: tweetSentiment.score };
+        console.log(`text: ${json.data.text} --END TWEET--`);
+
+        needle.post("http://localhost:4000/nest", tweetData, options, function (
+          err,
+          resp,
+          body
+        ) {
+          // needle will read the file and include it in the form-data as binary
+        });
 
         if (isHit) {
-          console.log(`[${username}]:${json.data.text}`);
           sendEmail(username, json.data.text);
         }
       } catch (e) {
@@ -204,20 +220,15 @@ function streamConnect() {
         stream.emit("timeout");
       }
     });
-
   return stream;
 }
 
 function filterMatch(input, data, rank, keywordArray) {
   let rawText = input.toLowerCase();
   let regex = /[.,\/#!$%\^&\*;:{}=\_`~()]/g;
-
   let text = rawText.replace(regex, "");
-
-  // let textArray = text.split(" ");
   let filterPlayers = [];
   let filterWords = [];
-  // let playersHitArray = [];
   let firstHit = false;
   let secondHit = false;
   let thirdHit = false;
@@ -225,6 +236,8 @@ function filterMatch(input, data, rank, keywordArray) {
   let hitPlayer;
   let hitNegative;
   let result = false;
+
+  console.log(rawText);
 
   for (let i = 1; i <= rank; i++) {
     filterPlayers.push(...data[`${i}`]);
@@ -267,10 +280,6 @@ function filterMatch(input, data, rank, keywordArray) {
       hitNegative = filterWord;
     }
   });
-
-  console.log(`text: ${text} --END TWEET--`);
-  // let regexSpace = /(\r\n|\n|\r)/gm;
-  // let newstr = text.replace(regex, "");
 
   if (firstHit) {
     console.log(`First Term that matched: ${hitPlayer}`);
@@ -319,9 +328,7 @@ function filterMatch(input, data, rank, keywordArray) {
   let timeout = 0;
   filteredStream.on("timeout", () => {
     // Reconnect on error
-    console.warn(
-      "\n \n \n A connection error occurred. Reconnecting… \n \n \n"
-    );
+    console.log("\n \n \n A connection error occurred. Reconnecting… \n \n \n");
     setTimeout(() => {
       timeout++;
       streamConnect(token);

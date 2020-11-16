@@ -6,8 +6,8 @@ const PORT = 4000;
 const fetch = require("isomorphic-fetch");
 const process = require("process");
 const { handleScrapeData } = require("../server/handlers/index");
+// require("./twitterStream");
 
-//
 function eventsHandler(req, res, next) {
   // Mandatory headers and http status to keep connection open
   const headers = {
@@ -18,6 +18,8 @@ function eventsHandler(req, res, next) {
   res.writeHead(200, headers);
   // After client opens connection send all nests as string
   const data = `data: ${JSON.stringify(nests)}\n\n`;
+  console.log("logging data");
+  console.log(data);
   res.write(data);
   // Generate an id based on timestamp and save res
   // object of client connection on clients list
@@ -62,11 +64,8 @@ app.use(function (req, res, next) {
   );
   next();
 });
-app.use("/api", router);
 app.use(cors());
-
-router.get("/getOddsData/:selectedCategory", handleScrapeData);
-
+app.get("/getOddsData/:selectedCategory", handleScrapeData);
 app.post("/nest", addNest);
 app.get("/events", eventsHandler);
 app.get("/status", (req, res) => res.json({ clients: clients.length }));
