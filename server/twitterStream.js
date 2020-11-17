@@ -13,11 +13,6 @@ const sentiment = new Sentiment();
 // const consumer_key = process.env.TWITTER_CONSUMER_KEY;
 // const consumer_secret = process.env.TWITTER_CONSUMER_SECRET;
 const token = process.env.TWITTER_BEARER_TOKEN;
-
-//
-
-const streamURL =
-  "https://api.twitter.com//2/tweets/search/stream?expansions=author_id";
 const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 
 //
@@ -170,17 +165,22 @@ function streamConnect() {
     .on("data", (data) => {
       try {
         const rawTweetData = JSON.parse(data);
-        let isHit = filterMatch(json.data.text, filterData, RANK, keywordArray);
-        let username = json.includes.users[0].username;
+        let isHit = filterMatch(
+          rawTweetData.data.text,
+          filterData,
+          RANK,
+          keywordArray
+        );
+        let username = rawTweetData.includes.users[0].username;
         // let tweet = `[${username}]:${json.data.text}`;
-        let tweetSentiment = sentiment.analyze(json.data.text);
+        let tweetSentiment = sentiment.analyze(rawTweetData.data.text);
         let options = {
           accept: "application/json",
           content_type: "application/json",
         };
 
         let tweetData = { rawTweetData, tweetSentiment: tweetSentiment.score };
-        console.log(`text: ${json.data.text} --END TWEET--`);
+        console.log(`text: ${rawTweetData.data.text} --END TWEET--`);
 
         needle.post("http://localhost:4000/nest", tweetData, options, function (
           err,

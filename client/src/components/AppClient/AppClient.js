@@ -20,6 +20,9 @@ const AppClient = () => {
 
 const AppContainer = styled.div`
   display: flex;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
 `;
 
 export default AppClient;

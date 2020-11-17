@@ -7,7 +7,6 @@ const DashBoard = () => {
   return (
     <>
       <Container>
-        <DashBoardHeader>Dashboard</DashBoardHeader>
         <TwitterFeed />
         <Data />
       </Container>
@@ -28,6 +27,6 @@ const Container = styled.div`
   flex-direction: column;
   flex: 1;
   background-color: ${(props) => props.theme.colors.blueAccent};
+  overflow: hidden;
+  position: relative;
 `;
-
-const DashBoardHeader = styled.h1``;

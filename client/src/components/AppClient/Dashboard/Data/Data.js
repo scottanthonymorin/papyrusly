@@ -97,6 +97,7 @@ const Data = () => {
 
   return (
     <>
+      <DataHeader>Arbitrage Opportunities</DataHeader>
       <GameDisplay>
         {!!oddsArray.length ? (
           <>
@@ -127,7 +128,6 @@ const Container = styled.div`
   justify-content: space-between;
   height: 80%;
   width: 100%;
-  overflow-y: scroll;
 `;
 
 const LoaderContainer = styled.div`
@@ -136,4 +136,9 @@ const LoaderContainer = styled.div`
   height: 100%;
   justify-content: center;
   align-items: center;
+`;
+
+const DataHeader = styled.h4`
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;

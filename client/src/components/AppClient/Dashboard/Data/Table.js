@@ -37,21 +37,18 @@ const HeadingRow = ({ headings, cell, cellIndex }) => {
 };
 
 const Row = ({ rows, stakes, rowIndex }) => {
-  console.log(stakes);
   const [isSelected, SetIsSelected] = React.useState(false);
   return (
     <StyledTRRow
       key={`row-${rowIndex}`}
       onClick={(e) => {
         console.log(e);
-        console.log("click event");
         SetIsSelected(!isSelected);
       }}
     >
       <RenderStakes style={{ flexDirection: isSelected ? "column" : "row" }}>
         <NormalRow>
           {rows[rowIndex].map((_cell, cellIndex) => {
-            console.log(stakes);
             return (
               <Cell
                 key={`${rowIndex}-${cellIndex}`}
@@ -101,7 +98,9 @@ const TableContainer = styled.div`
 
 const StyledThead = styled.div`
   background-color: ${(props) => props.theme.colors.lightGrey};
-  border: 1px solid ${(props) => props.theme.colors.grey};
+  border-top: 1px solid ${(props) => props.theme.colors.grey};
+  border-right: 1px solid ${(props) => props.theme.colors.grey};
+  border-left: 1px solid ${(props) => props.theme.colors.grey};
   border-radius: 5px 5px 0px 0px;
   display: flex;
 `;
@@ -110,11 +109,12 @@ const StyledTBody = styled.div`
   background-color: ${(props) => props.theme.colors.white};
   border: 1px solid ${(props) => props.theme.colors.grey};
   border-radius: 5px 5px 0px 0px;
+  overflow-y: scroll;
+  max-height: 250px;
 `;
 
 const StyledTRHeader = styled.div`
   width: 100%;
-  border: 1px solid ${(props) => props.theme.colors.grey};
   display: flex;
 
   &:hover {
@@ -133,8 +133,8 @@ const StyledTRHeader = styled.div`
 
 const StyledTRRow = styled.div`
   width: 100%;
-  border: 1px solid ${(props) => props.theme.colors.grey};
   display: flex;
+  border-bottom: 1px solid ${(props) => props.theme.colors.grey};
 
   &:hover {
     background: ${(props) => props.theme.colors.lightGrey};
