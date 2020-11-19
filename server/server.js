@@ -42,6 +42,11 @@ function sendEventsToAll(newNest) {
 async function addNest(req, res, next) {
   const newNest = req.body;
 
+  console.log(Object.keys(newNest).length === 0);
+  if (Object.keys(newNest).length === 0) {
+    console.log("empty nest");
+    return;
+  }
   nests.push(newNest);
   if (nests.length > 10) {
     nests.pop();

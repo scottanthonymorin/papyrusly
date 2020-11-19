@@ -32,6 +32,8 @@ export default function Cell({ content, header }) {
               : "black",
           fontWeight: polarity === "neutral" ? "normal" : "bold",
           textAlign: polarity === "neutral" ? "left" : "center",
+          width: polarity !== "neutral" ? "70px" : "",
+          left: content === "- | -" ? "17px" : "",
         }}
       >
         {content}
@@ -43,17 +45,19 @@ export default function Cell({ content, header }) {
 }
 
 const StyledHeaderCell = styled.div`
-  padding: 6px 17px;
+  padding: 6px 10px;
   font-weight: bold;
   text-align: left;
 `;
 
 const StyledCell = styled.div`
-  padding: 20px 20px;
+  padding: 15px;
   text-align: left;
 `;
 
 const StyledBox = styled.div`
   font-weight: bold;
   border-radius: 5px;
+  padding: 3px 5px;
+  position: relative;
 `;

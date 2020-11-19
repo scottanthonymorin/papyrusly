@@ -165,12 +165,20 @@ function streamConnect() {
     .on("data", (data) => {
       try {
         const rawTweetData = JSON.parse(data);
+        console.log(rawTweetData);
         let isHit = filterMatch(
           rawTweetData.data.text,
           filterData,
           RANK,
           keywordArray
         );
+        let hitWords = returnKeywordsHit(
+          rawTweetData.data.text,
+          filterData,
+          RANK,
+          keywordArray
+        );
+
         let username = rawTweetData.includes.users[0].username;
         // let tweet = `[${username}]:${json.data.text}`;
         let tweetSentiment = sentiment.analyze(rawTweetData.data.text);
@@ -179,7 +187,11 @@ function streamConnect() {
           content_type: "application/json",
         };
 
-        let tweetData = { rawTweetData, tweetSentiment: tweetSentiment.score };
+        let tweetData = {
+          rawTweetData,
+          tweetSentiment: tweetSentiment.score,
+          hitWords,
+        };
         console.log(`text: ${rawTweetData.data.text} --END TWEET--`);
 
         needle.post("http://localhost:4000/nest", tweetData, options, function (
@@ -221,6 +233,50 @@ function streamConnect() {
       }
     });
   return stream;
+}
+
+function returnKeywordsHit(input, data, rank, keywordArray) {
+  let rawText = input.toLowerCase();
+  let regex = /[.,\/#!$%\^&\*;:{}=\_`~()]/g;
+  let text = rawText.replace(regex, "");
+  let filterPlayers = [];
+  let filterWords = [];
+  let hitWord;
+  let hitPlayer;
+
+  for (let i = 1; i <= rank; i++) {
+    filterPlayers.push(...data[`${i}`]);
+  }
+  for (let i = 0; i < keywordArray.length; i++) {
+    filterWords.push(keywordArray[i]);
+  }
+
+  let filterWordsLowercase = filterWords.map((filter) => {
+    return filter.toLowerCase();
+  });
+
+  let filterPlayersLowercase = filterPlayers.map((filter) => {
+    return filter.toLowerCase();
+  });
+
+  //FILTER PASSES IF A CERTAIN PLAYER MATCHES IN TEXT
+
+  filterPlayersLowercase.forEach((player) => {
+    if (text.indexOf(`${player}`) >= 0) {
+      hitPlayer = player;
+    }
+  });
+
+  //FILTER PASSES IF A CERTAIN KEYWORD MATCHES IN TEXT
+
+  filterWordsLowercase.forEach((filterWord) => {
+    if (text.indexOf(`${filterWord}`) >= 0) {
+      secondHit = true;
+      hitWord = filterWord;
+    }
+  });
+
+  return { hitWord, hitPlayer };
 }
 
 function filterMatch(input, data, rank, keywordArray) {

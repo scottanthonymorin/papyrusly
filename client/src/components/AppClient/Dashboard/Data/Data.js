@@ -1,26 +1,18 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import OddsTab from "./OddsTab";
 import { getFetch } from "../../../../helpers/getFetch";
 import { useDispatch } from "react-redux";
 import { uploadTeamData } from "../../../../actions";
-import Loader from "react-loader-spinner";
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Table from "./Table";
 import calculateArbitrage from "../../../../helpers/calculateArbitrage";
 
-const Data = () => {
+const Data = ({ isDataFetched, SetisDataFetched, isLoaded }) => {
   const [oddsArray, SetOddsArray] = React.useState([]);
-  const [headings, SetHeadings] = React.useState([
-    "Matchup",
-    "Pinnacle",
-    "BetWay",
-    "Arbitrage",
-  ]);
   const [rows, SetRows] = React.useState([]);
   const [stakes, SetStakes] = React.useState([]);
   const selectedCategory = useSelector((state) => state.selectedCategory);
+  const headings = ["Matchup", "Pinnacle", "BetWay", "Arbitrage"];
   const dispatch = useDispatch();
   const DELAY = 30000;
 
@@ -61,7 +53,6 @@ const Data = () => {
             }))
           );
           SetOddsArray(processedData);
-          dispatch(uploadTeamData(processedData));
         }
       } catch (err) {
         console.log("fetching data error");
@@ -92,26 +83,23 @@ const Data = () => {
     SetRows(_rows);
   }, [oddsArray]);
 
-  ///pass stakes into table component so we when we click the game, it will have
-  //an accordian effect and will reveal stakes and linkes for the sites
+  if (!!oddsArray.length && !isDataFetched) {
+    SetisDataFetched(true);
+  }
+
+  dispatch(uploadTeamData(oddsArray));
 
   return (
-    <>
-      <DataHeader>Arbitrage Opportunities</DataHeader>
-      <GameDisplay>
-        {!!oddsArray.length ? (
-          <>
-            <Container>
-              <Table headings={headings} rows={rows} stakes={stakes} />
-            </Container>
-          </>
-        ) : (
-          <LoaderContainer>
-            <Loader type="Bars" color="#00BFFF" height={100} width={100} />
-          </LoaderContainer>
-        )}
-      </GameDisplay>
-    </>
+    isLoaded && (
+      <>
+        <GameDisplay>
+          <DataHeader>Current Odds</DataHeader>
+          <Container>
+            <Table headings={headings} rows={rows} stakes={stakes} />
+          </Container>
+        </GameDisplay>
+      </>
+    )
   );
 };
 
@@ -119,7 +107,8 @@ export default Data;
 
 const GameDisplay = styled.div`
   display: flex;
-  height: 100%;
+  height: 60vh;
+  flex-direction: column;
 `;
 
 const Container = styled.div`
@@ -130,15 +119,9 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const LoaderContainer = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-`;
-
 const DataHeader = styled.h4`
-  margin-top: 10px;
+  margin-top: 0px;
   margin-bottom: 10px;
+  font-size: 1em;
+  font-weight: bold;
 `;
